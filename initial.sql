@@ -17,3 +17,10 @@ CREATE TABLE users(
   amountBought INT(5),
   moneySpent DECIMAL(7,2)
 );
+
+DROP TABLE IF EXISTS Cart;
+
+CREATE TABLE cart(
+  CONSTRAINT cartID PRIMARY KEY(itemID, userID),
+  quantity INT(5)
+);
