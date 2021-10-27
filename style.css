@@ -1,1 +1,76 @@
+body
+{
+	background-color: #039dfc;
+}
+label, .tablinks
+{
+	font-weight: 1000;
+}
+label, #loginHeader, #loginSubmit, .tablinks
+{
+	text-align: center;
+	font-family: helvetica, 'lucida console', verdana;
+}
+.tabcontent
+{
+	display: none;
+	margin: auto;
+	width: 30%;
+	text-align: center;
+	border: 5px solid green;
+	border-top: #03fc6f;
+	border-bottom-left-radius: 16px;
+	border-bottom-right-radius: 16px;
+	background-color: #03fc6f;
+}
+.textbox
+{
+	width: 80%;
+	padding: 8px;
+	text-align: left;
+	box-shadow: 3px 3px 3px green;
+	border-width: 2px;
+	border-radius: 4px;
+}
+.submit
+{
+	font-weight: 700;
+	border-radius: 3px;
+	background-color: #ccc8be;
+}
+.tab 
+{
+	overflow: hidden;
+	width: 30%;
+	border: 5px solid green;
+	background-color: #03fc6f;
+}
+.tab button
+{
+	width: 50%;
+	border: none;
+	float: left;
+	border-radius: 0px;
+	background-color: #03fc6f;
+	padding-top: 20px;
+	padding-bottom: 20px;
+	outline: none;
+}
+.tab button:hover
+{
+	background-color: #26c421;
+}
+.tab button.active
+{
+    background-color: #26c421;
+}
+.errorM
+{
+	width: 30%;
+	border: 5px darkred;
+}
+#searchPanel
+{
+	width: 50%;
+}
 
