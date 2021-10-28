@@ -19,7 +19,21 @@
 	if(isset($_GET["searchSubmit"]))
 	{
 		$db = mysqli_connect("localhost:3306", "root", "", "pricearena");
-		$result=mysqli_query($db, "select * from items where username like '%" . $_GET['searchBox'] . "%';");
+		$result=mysqli_query($db, "select name, price, image from items where name like '%" . $_GET['searchBox'] . "%';") or die(mysqli_error($db));
+		print "<table><tr>
+					<tr>Item</tr>
+					<tr>Image</tr>
+					<tr>Price</tr>
+					<tr>Buy</tr>
+			   </tr><br/>";
+		while($row = $result->fetch_assoc())
+		{
+			print "<tr>" . $row["name"] . "</tr>";
+			print "<tr>" . $row["image"] . "</tr>";
+			print "<tr>" . $row["price"] . "</tr>";
+			print "<tr>" . "<form/>" . "</tr>";
+		}
+		print "</table>";
 	}
 ?>
 
