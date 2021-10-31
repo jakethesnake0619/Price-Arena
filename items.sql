@@ -1,4 +1,4 @@
-INSERT INTO `pricearena`.`amazon-products` (`itemID`, `name`, `price`, `image`, `timesBought`) VALUES (0, 'All-new Kindle Paperwhite (8 GB) – Now with a 6.8\" display and adjustable warm light – Ad-Supported', '$139.99', '', 0),
+INSERT INTO `pricearena`.`items` (`itemID`, `name`, `price`, `image`, `timesBought`) VALUES (0, 'All-new Kindle Paperwhite (8 GB) – Now with a 6.8\" display and adjustable warm light – Ad-Supported', '$139.99', '', 0),
  (1, '100Pcs Joe Biden I DID That! - Sticker Decal Humor - Joe Biden Funny Sticker That\'s All Me I Did That - Pointed to Your Left Funny Joe Biden Campaign Logo Parody Sticker 3 in', '$14.99', '', 0),
  (2, 'Philips Avent Anti-Colic Baby Bottle with AirFree Vent, 9oz, 1pk, Clear, SCY703/91', '$8.99', '', 0),
  (3, 'VELCRO Brand Extreme Outdoor Mounting Tape | 20Ft x 1 in, Holds 15 lbs | Strong Heavy Duty Stick on Adhesive | Mount on Brick, Concrete for Hanging, 30702', '$19.99', '', 0),
