@@ -32,3 +32,5 @@ CREATE TABLE cart(
   PRIMARY KEY (itemID, userName),
   quantity INT(5)
 );
+
+ALTER TABLE `items` CHANGE `name` `name` CHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
