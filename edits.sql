@@ -1,0 +1,3 @@
+ALTER TABLE `items` ADD PRIMARY KEY( `itemID`);
+ALTER TABLE `items` CHANGE `name` `name` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
+ALTER TABLE `items` CHANGE `timesBought` `timesBought` INT(5) NULL DEFAULT NULL;
