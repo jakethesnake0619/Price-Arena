@@ -5,7 +5,7 @@ DROP TABLE IF EXISTS Items;
 
 CREATE TABLE items(
   itemID CHAR(10) PRIMARY KEY,
-  name CHAR(20),
+  name CHAR(255),
   price DECIMAL(7,2),
   image CHAR(255),
   timesBought INT(5)
@@ -32,5 +32,3 @@ CREATE TABLE cart(
   PRIMARY KEY (itemID, userName),
   quantity INT(5)
 );
-
-ALTER TABLE `items` CHANGE `name` `name` CHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
