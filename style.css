@@ -11,7 +11,7 @@ label, #loginHeader, #loginSubmit, .tablinks
 	text-align: center;
 	font-family: helvetica, 'lucida console', verdana;
 }
-.tabcontent
+.tabcontent 
 {
 	display: none;
 	margin: auto;
@@ -73,4 +73,34 @@ label, #loginHeader, #loginSubmit, .tablinks
 {
 	width: 50%;
 }
-
+table
+{
+	border-collapse: collapse;
+	padding: 10px;
+}
+td, th
+{
+    border: 3px solid black;
+}
+img
+{
+	width: 100px;
+	height: 100px;
+}
+#quantity
+{
+	width: 20%;
+	padding: none;
+	box-shadow: 3px 3px 3px green;
+	border-width: 2px;
+	border-radius: 4px;
+}
+.row
+{
+	display: flex;
+}
+.column
+{
+	padding: 2%;
+	float: left;
+}

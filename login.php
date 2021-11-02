@@ -52,7 +52,7 @@
         {
             print "
                 <center>
-                    <div class=>
+                    <div>
                         <h3>Error: Username or password invalid!</h3>
                     </div>
                 </center>";
@@ -84,7 +84,7 @@
                 $username = mysqli_real_escape_string($db, $_GET["username"]);
                 $hash = password_hash($_GET["password"], PASSWORD_DEFAULT); 
                 mysqli_query($db, "insert into users (userName, pass, mostBought, amountBought, moneySpent) values ('$username', '$hash', NULL, 0, 0.00);") or die(mysqli_error($db));
-                $_SESSION["username"] = $row["username"];
+                $_SESSION["username"] = $_GET['username'];
                 header("Location: http://localhost/Price-Arena/shop.php");
             }
             else
