@@ -89,7 +89,7 @@ img
 }
 #quantity
 {
-	width: 20%;
+	width: 40%;
 	padding: none;
 	box-shadow: 3px 3px 3px green;
 	border-width: 2px;
@@ -101,6 +101,43 @@ img
 }
 .column
 {
-	padding: 2%;
+	padding: 1%;
 	float: left;
+}
+#headertable
+{
+    table-layout: fixed;
+    width: 100%;
+}
+#headertable, #headerrow, #headercell
+{
+    border: 2px solid darkgrey;
+}
+#headercell
+{
+    background-color: lightgrey;
+    height: 40px;
+}
+.navbar
+{
+    width: 100%;
+    height: 40px;
+    position: fixed;
+    z-index: 1;
+    background-color: transparent;
+    padding: none;
+}
+.navbar a
+{
+    float: center;
+    display: block;
+    text-decoration: none;
+    font-family: verdana;
+    padding-top: 10px;
+    height: 30px;
+}
+html, body 
+{
+	margin:0;
+	padding:0;
 }

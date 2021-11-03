@@ -1,4 +1,5 @@
 <?php session_start() ?>
+<?php include "header.php"?>
 <!DOCTYPE html>
 <html>
 <body>
@@ -6,6 +7,7 @@
     <title>Shopping Page</title>
     <link href="style.css" type="text/css" rel="stylesheet"/>
 </head>
+<br/><br/><br/>
 <h1 id = 'loginHeader'>Available Items</h1>
 <center>
 <div id='searchPanel'>
@@ -17,6 +19,35 @@
 </center>
 <?php
 	$db = mysqli_connect("localhost:3306", "root", "", "pricearena");
+    if(isset($_GET["cartSubmit"]))
+    {
+    	$result = mysqli_query($db, "select itemID from items order by itemID;")or die(mysqli_error($db));
+    	while($row = $result->fetch_assoc()) 
+    	{
+    		if(isset($_GET[$row["itemID"]]))
+    		{
+    			mysqli_query($db, "UPDATE items SET timesBought = timesBought + " . $_GET[$row["itemID"]] . " WHERE itemID = " . $row["itemID"] . ";");
+    			mysqli_query($db, "UPDATE users SET amountBought = amountBought + " . $_GET[$row["itemID"]] . " WHERE userName = '" . $_SESSION["username"] . "';") or die(mysqli_error($db));
+    			mysqli_query($db, "UPDATE users SET moneySpent = moneySpent + " . $_GET[$row["itemID"]] . " * (select price from items where itemID = " . $row["itemID"] . ") WHERE userName = '" . $_SESSION["username"] . "';") or die(mysqli_error($db));
+    			$result2 = mysqli_query($db, "select itemID, userName from cart where itemID = " . $row["itemID"] . " and userName = '" . $_SESSION["username"] . "';") or die(mysqli_error($db));
+    			$row2 = $result2->fetch_assoc();
+		    	if($row2["itemID"] == '' and $row2["userName"] == '')
+		    	{
+		    		$itemID = $row["itemID"];
+		    		$username = $_SESSION["username"];
+		    		$quantity = $_GET[$row["itemID"]];
+		    		mysqli_query($db, "insert into cart (itemID, userName, quantity) values ('$itemID', '$username', $quantity);") or die(mysqli_error($db));
+		    	}
+		    	else
+		    	{
+		    		$query = "update cart set quantity = quantity + " . $_GET[$row["itemID"]] . " where userName = '" . $_SESSION["username"] . "' and itemID = '" . $row["itemID"] . "';";
+		    		mysqli_query($db, $query)or die(mysqli_error($db));
+		    	}
+   				mysqli_query($db, "UPDATE users set mostBought = (select itemID from cart where quantity = (select max(quantity) from cart where userName = '" . $_SESSION["username"] . "' limit 1) and userName = '" . $_SESSION["username"] . "' limit 1) where userName = '" . $_SESSION["username"] . "';") or die(mysqli_error($db));
+		    	break;
+    		}
+    	}
+    }
 	print "<br/><div class='row'><div class='column'>
 	       <table>
 				<th colspan='2'>Top 5 Most Bought</th>
@@ -43,7 +74,6 @@
 			$cartCount--;
 		}
 	}
-
 	print "</table></div>";
 	print "<div class='column'><table><th>        Name        </th>
 	   <th> Price </th>
@@ -66,35 +96,6 @@
     	print "<td><form action='http://localhost/Price-Arena/shop.php' id='cartSubmit' name='cartSubmit'><center><input type='number' class='numBox' id='quantity' value='0' min='0' name='" . $row["itemID"] . "'><input type='submit' class='submit' id='cartSubmit' name='cartSubmit' value='Add To Cart' /></center></form></td>";
     }
     print "</table></div>";
-    if(isset($_GET["cartSubmit"]))
-    {
-    	$result = mysqli_query($db, "select itemID from items order by itemID;")or die(mysqli_error($db));
-    	while($row = $result->fetch_assoc()) 
-    	{
-    		if(isset($_GET[$row["itemID"]]))
-    		{
-    			mysqli_query($db, "UPDATE items SET timesBought = timesBought + " . $_GET[$row["itemID"]] . " WHERE itemID = " . $row["itemID"] . ";");
-    			mysqli_query($db, "UPDATE users SET amountBought = amountBought + " . $_GET[$row["itemID"]] . " WHERE userName = '" . $_SESSION["username"] . "';") or die(mysqli_error($db));
-    			mysqli_query($db, "UPDATE users SET moneySpent = moneySpent + " . $_GET[$row["itemID"]] . " * (select price from items where itemID = " . $row["itemID"] . ") WHERE userName = '" . $_SESSION["username"] . "';") or die(mysqli_error($db));
-    			//mysqli_query($db, "");
-    			$result2 = mysqli_query($db, "select itemID, userName from cart where itemID = " . $row["itemID"] . " and userName = '" . $_SESSION["username"] . "';") or die(mysqli_error($db));
-    			$row2 = $result2->fetch_assoc();
-		    	if($row2["itemID"] == '' and $row2["userName"] == '')
-		    	{
-		    		$itemID = $row["itemID"];
-		    		$username = $_SESSION["username"];
-		    		$quantity = $_GET[$row["itemID"]];
-		    		mysqli_query($db, "insert into cart (itemID, userName, quantity) values ('$itemID', '$username', $quantity);") or die(mysqli_error($db));
-		    	}
-		    	else
-		    	{
-		    		$query = "update cart set quantity = quantity + " . $_GET[$row["itemID"]] . " where userName = '" . $_SESSION["username"] . "' and itemID = '" . $row["itemID"] . "';";
-		    		mysqli_query($db, $query)or die(mysqli_error($db));
-		    	}
-		    	break;
-    		}
-    	}
-    }
     print "<div class='column'>
 	       <table>
 				<th colspan='2'>Top 5 Buyers</th>
@@ -119,12 +120,12 @@
 	print "</table></div>";
     print "<div class='column'>
 	       <table>
-				<th colspan='2'>Top 5 Most Bought</th>
-				<tr><td>Name</td><td>Amount Bought</td></tr>";
-	$result = mysqli_query($db, "select userName, moneySpent from users order by moneySpent;")or die(mysqli_error($db));
-	$temp = mysqli_query($db, "select count(userName) from users")or die(mysqli_error($db));
+				<th colspan='2'>Most Bought By User</th>
+				<tr><td>Name</td><td>Most Bought</td></tr>";
+	$result = mysqli_query($db, "select userName, name from (select userName, mostBought from users order by userName) as table1 inner join (select itemID, name from items) as table2 on mostBought = itemID;")or die(mysqli_error($db));
+	$temp = mysqli_query($db, "select count(mostBought) from users")or die(mysqli_error($db));
 	$temp = $temp->fetch_assoc();
-	$userCount = $temp["count(userName)"];
+	$userCount = $temp["count(mostBought)"];
 	if($userCount > 5) { $userCount = 5; }
 	while($row = $result->fetch_assoc())
 	{
@@ -135,7 +136,7 @@
 	{
 		if($userCount == 0)
 			break;
-		print "<tr><td>" . $row["userName"] . "</td><td>$" . $row["moneySpent"] . "</td></tr>";
+		print "<tr><td>" . $row["userName"] . "</td><td>" . $row["name"] . "</td></tr>";
 		$userCount--;
 	}
 
