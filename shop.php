@@ -26,9 +26,7 @@
     	{
     		if(isset($_GET[$row["itemID"]]))
     		{
-    			mysqli_query($db, "UPDATE items SET timesBought = timesBought + " . $_GET[$row["itemID"]] . " WHERE itemID = " . $row["itemID"] . ";");
-    			mysqli_query($db, "UPDATE users SET amountBought = amountBought + " . $_GET[$row["itemID"]] . " WHERE userName = '" . $_SESSION["username"] . "';") or die(mysqli_error($db));
-    			mysqli_query($db, "UPDATE users SET moneySpent = moneySpent + " . $_GET[$row["itemID"]] . " * (select price from items where itemID = " . $row["itemID"] . ") WHERE userName = '" . $_SESSION["username"] . "';") or die(mysqli_error($db));
+    			mysqli_query($db, "CALL updateLeaderBoards(" . $_GET[$row["itemID"]] . ", '" . $row["itemID"] . "', '" . $_SESSION["username"] . "');");
     			$result2 = mysqli_query($db, "select itemID, userName from cart where itemID = " . $row["itemID"] . " and userName = '" . $_SESSION["username"] . "';") or die(mysqli_error($db));
     			$row2 = $result2->fetch_assoc();
 		    	if($row2["itemID"] == '' and $row2["userName"] == '')

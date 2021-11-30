@@ -45,10 +45,10 @@
     $db = mysqli_connect("localhost:3306", "root", "", "pricearena");
     if(isset($_GET["loginSubmit"]))
     {
-        $query = "select username, pass from users where username = '" . $_GET['username'] . "';";
+        $query = "CALL login('" . $_GET['username'] . "');";
         $result = mysqli_query($db, $query) or die(mysqli_error($db));
         $row = $result->fetch_assoc();
-        if($row["username"] != $_GET["username"] or !password_verify($_GET["password"], $row["pass"]))
+        if($row["userName"] != $_GET["username"] or !password_verify($_GET["password"], $row["pass"]))
         {
             print "
                 <center>
@@ -59,7 +59,8 @@
         }
         else
         {
-            $_SESSION["username"] = $row["username"];
+            $_SESSION["username"] = $_GET['username'];
+            $result = mysqli_next_result($db);
             header("Location: http://localhost/Price-Arena/shop.php");
         }
     }
@@ -76,19 +77,22 @@
         }
         else
         {
-            $query = "select username from users where username = '" . $_GET['username'] . "';";
+            $query = "CALL register('" . $_GET['username'] . "');";
             $result = mysqli_query($db, $query) or die(mysqli_error($db));
             $row = $result->fetch_assoc();
-            if($row["username"] == '')
+            if($row["userName"] == '')
             {
+                $result = mysqli_next_result($db);
                 $username = mysqli_real_escape_string($db, $_GET["username"]);
                 $hash = password_hash($_GET["password"], PASSWORD_DEFAULT); 
-                mysqli_query($db, "insert into users (userName, pass, mostBought, amountBought, moneySpent) values ('$username', '$hash', NULL, 0, 0.00);") or die(mysqli_error($db));
+                $query = "CALL addAccount('$username', '$hash');";
+                mysqli_query($db, $query) or die(mysqli_error($db));
                 $_SESSION["username"] = $_GET['username'];
                 header("Location: http://localhost/Price-Arena/shop.php");
             }
             else
             {
+                $result = mysqli_next_result($db);
                 print "
                     <center>
                         <div class=>

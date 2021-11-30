@@ -10,6 +10,7 @@
     		<tr id = "headerrow">
     			<td id = "headercell"><a href = "http://localhost/Price-Arena/login.php"><center>Login/Register</center></a></td>
     			<td id = "headercell"><a href = "http://localhost/Price-Arena/shop.php"><center>Shop</center></a></td>
+                <td id = "headercell"><a href = "http://localhost/Price-Arena/cart.php"><center>Cart</center></a></td>
     		</tr>
     	</table>
     </div>
