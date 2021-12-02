@@ -19,6 +19,7 @@
         if(isset($_GET[$row["itemID"]]))
         {
             mysqli_query($db, "DELETE FROM cart where itemID = '". $row["itemID"] ."' AND userName = '" . $_SESSION["username"] . "';") or die(mysqli_error($db));
+            mysqli_query($db, "UPDATE users SET moneySpent = moneySpent - " . ($row["quantity"] * $row["price"]) . " where userName = '". $_SESSION["username"] ."';") or die(mysqli_error($db));
         }
     } 
     $result = mysqli_query($db, "SELECT * from (SELECT * from cart temp where username ='" . $_SESSION["username"] . "') temp INNER JOIN items on temp.itemID = items.itemID;") or die(mysqli_error($db));
