@@ -46,10 +46,34 @@
     		}
     	}
     }
+	
 	print "<br/><div class='row'><div class='column'>
 	       <table>
-				<th colspan='2'>Top 5 Most Bought</th>
-				<tr><td>Name</td><td>Amount Bought</td></tr>";
+				<th colspan='2'>Top 5 Buyers</th>
+				<tr><td>Name</td><td>Money Spent</td></tr>";
+	$result = mysqli_query($db, "select userName, moneySpent from users order by moneySpent;")or die(mysqli_error($db));
+	$temp = mysqli_query($db, "select count(userName) from users")or die(mysqli_error($db));
+	$temp = $temp->fetch_assoc();
+	$userCount = $temp["count(userName)"];
+	while($row = $result->fetch_assoc())
+	{
+		$array[] = $row;
+	}
+	$array = array_reverse($array, true);
+	foreach($array as $row)
+	{
+		if($userCount == 0)
+			break;
+		if($row["moneySpent"] > 0)
+			print "<tr><td>" . $row["userName"] . "</td><td>$" . $row["moneySpent"] . "</td></tr>";
+		$userCount--;
+	}
+
+	print "</table></div>";
+	print "<div class='column'>
+	       <table>
+			<th colspan='2'>Top 5 Most Bought</th>
+			<tr><td>Name</td><td>Amount Bought</td></tr>";
 	$result = mysqli_query($db, "select itemID, SUM(quantity) from cart group by itemID order by SUM(quantity), itemID;")or die(mysqli_error($db));
 	$temp = mysqli_query($db, "select count(itemID) from cart");
 	$temp = $temp->fetch_assoc();
@@ -74,6 +98,29 @@
 		}
 	}
 	print "</table></div>";
+   	print "<div class='column'>
+	       <table>
+			<th colspan='2'>Most Bought By User</th>
+			<tr><td>Name</td><td>Most Bought</td></tr>";
+	$result = mysqli_query($db, "select userName, name from (select userName, mostBought, amountBought from users order by userName) as table1 inner join (select itemID, name from items) as table2 on mostBought = itemID AND amountBought > 0;")or die(mysqli_error($db));
+	$temp = mysqli_query($db, "select count(mostBought) from users where amountBought > 0")or die(mysqli_error($db));
+	$temp = $temp->fetch_assoc();
+	$userCount = $temp["count(mostBought)"];
+	if($userCount > 5) { $userCount = 5; }
+	while($row = $result->fetch_assoc())
+	{
+		$array[] = $row;
+	}
+	$array = array_reverse($array, true);
+	foreach($array as $row)
+	{
+		if($userCount == 0)
+			break;
+		print "<tr><td>" . $row["userName"] . "</td><td>" . $row["name"] . "</td></tr>";
+		$userCount--;
+	}
+
+	print "</table></div></div>";
 	print "<div class='column'><table><th>        Name        </th>
 	   <th> Price </th>
 	   <th>        Image        </th>
@@ -95,52 +142,6 @@
     	print "<td><form action='http://localhost/Price-Arena/shop.php' id='cartSubmit' name='cartSubmit'><center><input type='number' class='numBox' id='quantity' value='0' min='0' name='" . $row["itemID"] . "'><input type='submit' class='submit' id='cartSubmit' name='cartSubmit' value='Add To Cart' /></center></form></td>";
     }
     print "</table></div>";
-    print "<div class='column'>
-	       <table>
-				<th colspan='2'>Top 5 Buyers</th>
-				<tr><td>Name</td><td>Money Spent</td></tr>";
-	$result = mysqli_query($db, "select userName, moneySpent from users order by moneySpent;")or die(mysqli_error($db));
-	$temp = mysqli_query($db, "select count(userName) from users")or die(mysqli_error($db));
-	$temp = $temp->fetch_assoc();
-	$userCount = $temp["count(userName)"];
-	while($row = $result->fetch_assoc())
-	{
-		$array[] = $row;
-	}
-	$array = array_reverse($array, true);
-	foreach($array as $row)
-	{
-		if($userCount == 0)
-			break;
-		if($row["moneySpent"] > 0)
-			print "<tr><td>" . $row["userName"] . "</td><td>$" . $row["moneySpent"] . "</td></tr>";
-		$userCount--;
-	}
-
-	print "</table></div>";
-    print "<div class='column'>
-	       <table>
-				<th colspan='2'>Most Bought By User</th>
-				<tr><td>Name</td><td>Most Bought</td></tr>";
-	$result = mysqli_query($db, "select userName, name from (select userName, mostBought, amountBought from users order by userName) as table1 inner join (select itemID, name from items) as table2 on mostBought = itemID AND amountBought > 0;")or die(mysqli_error($db));
-	$temp = mysqli_query($db, "select count(mostBought) from users where amountBought > 0")or die(mysqli_error($db));
-	$temp = $temp->fetch_assoc();
-	$userCount = $temp["count(mostBought)"];
-	if($userCount > 5) { $userCount = 5; }
-	while($row = $result->fetch_assoc())
-	{
-		$array[] = $row;
-	}
-	$array = array_reverse($array, true);
-	foreach($array as $row)
-	{
-		if($userCount == 0)
-			break;
-		print "<tr><td>" . $row["userName"] . "</td><td>" . $row["name"] . "</td></tr>";
-		$userCount--;
-	}
-
-	print "</table></div></div>";
 
 ?>
 
