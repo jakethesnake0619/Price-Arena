@@ -68,7 +68,8 @@
 				break;
 			$result2 = mysqli_query($db, "select name from items where itemID = '" . $row["itemID"] . "';")or die(mysqli_error($db));
 			$row2 = $result2->fetch_assoc();
-			print "<tr><td>" . $row2["name"] . "</td><td>" . $row["SUM(quantity)"] . "</td></tr>";
+			if( $row["SUM(quantity)"] > 0)
+				print "<tr><td>" . $row2["name"] . "</td><td>" . $row["SUM(quantity)"] . "</td></tr>";
 			$cartCount--;
 		}
 	}
@@ -111,7 +112,8 @@
 	{
 		if($userCount == 0)
 			break;
-		print "<tr><td>" . $row["userName"] . "</td><td>$" . $row["moneySpent"] . "</td></tr>";
+		if($row["moneySpent"] > 0)
+			print "<tr><td>" . $row["userName"] . "</td><td>$" . $row["moneySpent"] . "</td></tr>";
 		$userCount--;
 	}
 
@@ -120,8 +122,8 @@
 	       <table>
 				<th colspan='2'>Most Bought By User</th>
 				<tr><td>Name</td><td>Most Bought</td></tr>";
-	$result = mysqli_query($db, "select userName, name from (select userName, mostBought from users order by userName) as table1 inner join (select itemID, name from items) as table2 on mostBought = itemID;")or die(mysqli_error($db));
-	$temp = mysqli_query($db, "select count(mostBought) from users")or die(mysqli_error($db));
+	$result = mysqli_query($db, "select userName, name from (select userName, mostBought, amountBought from users order by userName) as table1 inner join (select itemID, name from items) as table2 on mostBought = itemID AND amountBought > 0;")or die(mysqli_error($db));
+	$temp = mysqli_query($db, "select count(mostBought) from users where amountBought > 0")or die(mysqli_error($db));
 	$temp = $temp->fetch_assoc();
 	$userCount = $temp["count(mostBought)"];
 	if($userCount > 5) { $userCount = 5; }
